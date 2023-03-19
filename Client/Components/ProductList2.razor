@@ -1,0 +1,13 @@
+﻿@using BlazorAppBenchmark.Client.Models;
+@inherits BaseMeasureComponent
+
+<h1>Total product is @ProductCount</h1>
+@ChildContent
+
+@code {
+    [Parameter] public int ProductCount { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    
+    protected override string Message => $"Component {nameof(ProductList2)} re-render";
+
+}

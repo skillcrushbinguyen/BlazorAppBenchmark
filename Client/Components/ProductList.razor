@@ -1,0 +1,23 @@
+﻿@using BlazorAppBenchmark.Client.Models;
+@inherits BaseMeasureComponent
+
+@if (Products != null)
+{
+    <h1>Total product is @Products.Count()</h1>
+    @foreach (var product in Products)
+    {
+        <ProductCard Id="product.Id" Name="@product.Name" Price="product.Price" CreateTime="product.CreateTime" OnClicked="OnClickProductCard" />
+    }
+
+}
+@code {
+    [Parameter] public IEnumerable<Product>? Products { get; set; }
+    [Parameter] public EventCallback<Product> OnUpdate { get; set; }
+    protected override string Message => $"Component {nameof(ProductList)} re-render";
+
+    void OnClickProductCard(int id)
+    {
+        OnUpdate.InvokeAsync(Products!.FirstOrDefault(e => e.Id == id));
+    }
+
+}

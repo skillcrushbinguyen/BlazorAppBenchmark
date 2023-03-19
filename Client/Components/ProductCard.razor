@@ -1,0 +1,22 @@
+﻿@inherits BaseMeasureComponent;
+
+<div class="d-flex flex-column border border-success rounded-1 p-1" @onclick=OnClick>
+    <h2>Name: @Name</h2>
+    <h3>Id: @Id</h3>
+    <h4>Pricec: @Price</h4>
+    <h5>Create: @CreateTime</h5>
+</div>
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string? Name { get; set; }
+    [Parameter] public decimal Price { get; set; }
+    [Parameter] public DateTime CreateTime { get; set; }
+    [Parameter] public EventCallback<int> OnClicked { get; set; }
+    protected override string Message => $"Component {nameof(ProductCard)} with Id: {Id}, Name: {Name} re-render";
+
+    void OnClick()
+    {
+        OnClicked.InvokeAsync(Id);
+    }
+
+}

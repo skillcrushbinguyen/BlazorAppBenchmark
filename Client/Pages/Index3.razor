@@ -1,0 +1,62 @@
+﻿@page "/index3"
+@using BlazorAppBenchmark.Client.Models;
+
+<PageTitle>Index</PageTitle>
+
+@if(editContext != null)
+{
+  <EditForm EditContext="editContext">
+    <InputText DisplayName="Product name" @bind-Value="ProductName" />
+    <button>Update</button>
+    @foreach (var product in Products!)
+    {
+      <BlazorAppBenchmark.Client.Components.ProductCard 
+        Id="product.Id" 
+        Name="@product.Name" 
+        Price="product.Price" 
+        CreateTime="product.CreateTime" 
+        OnClicked="OnUpdate" />
+    }
+  </EditForm>
+   
+}
+@code {
+    EditContext editContext { get; set; } = default!;
+    IEnumerable<Product>? Products { get; set; }
+    int Id { get; set; }
+    string ProductName { get; set; } = "";
+    protected override void OnInitialized()
+    {
+        Random rnd = new Random();
+        Products = Enumerable.Range(1, 3).Select(e =>
+        {
+            return new Product()
+                {
+                    Id = e,
+                    Name = $"Product T-shirt {e}",
+                    Price = e * 0.5m,
+                    CreateTime = DateTime.Now.AddMinutes(e)
+                };
+        }).ToList();
+        editContext = new(Products);
+        base.OnInitialized();
+    }
+
+    void OnUpdate(int productId)
+    {
+        var product = Products!.FirstOrDefault(e => e.Id == productId);
+        if (product == null) return;
+
+        Id = product.Id;
+        ProductName = product.Name!;
+    }
+
+    void OnClick()
+    {
+        var product = Products!.FirstOrDefault(e => e.Id == Id);
+        if (product != null)
+        {
+            product.Name = ProductName;
+        }
+    }
+}
